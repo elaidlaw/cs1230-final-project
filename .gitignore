@@ -1,32 +1,18 @@
-# Prerequisites
-*.d
-
-# Compiled Object files
-*.slo
-*.lo
 *.o
-*.obj
+moc_*
+Makefile*
+ui_*
+*.user
+CS123
+.DS_Store
+CS123.app
+qrc_resources.cpp
+.qmake.stash
+*.Debug
+*.Release
 
-# Precompiled Headers
-*.gch
-*.pch
+*.pbxproj
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+*.mak
 
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
+*.plist
