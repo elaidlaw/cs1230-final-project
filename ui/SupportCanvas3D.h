@@ -70,6 +70,7 @@ public slots:
     void updateCameraRotationV();
     void updateCameraRotationN();
     void updateCameraClip();
+    void startCityManager();
 
 signals:
     void aspectRatioChanged();
