@@ -20,6 +20,7 @@ SupportCanvas3D::SupportCanvas3D(QGLFormat format, QWidget *parent) : QGLWidget(
     m_isDragging(false),
     m_settingsDirty(true),
     m_defaultPerspectiveCamera(new CamtransCamera()),
+    m_cityCamera(new CamtransCamera()),
     m_defaultOrbitingCamera(new OrbitingCamera()),
     m_currentScene(nullptr)
 {
@@ -30,16 +31,17 @@ SupportCanvas3D::~SupportCanvas3D()
 }
 
 Camera *SupportCanvas3D::getCamera() {
-    switch(settings.getCameraMode()) {
-        case CAMERAMODE_CAMTRANS:
-            return m_defaultPerspectiveCamera.get();
+//    switch(settings.getCameraMode()) {
+//        case CAMERAMODE_CAMTRANS:
+//            return m_defaultPerspectiveCamera.get();
 
-        case CAMERAMODE_ORBIT:
-            return m_defaultOrbitingCamera.get();
+//        case CAMERAMODE_ORBIT:
+//            return m_defaultOrbitingCamera.get();
 
-        default:
-            return nullptr;
-    }
+//        default:
+//            return nullptr;
+//    }
+    return m_cityCamera.get();
 }
 
 OrbitingCamera *SupportCanvas3D::getOrbitingCamera() {
@@ -49,6 +51,10 @@ OrbitingCamera *SupportCanvas3D::getOrbitingCamera() {
 
 CamtransCamera *SupportCanvas3D::getCamtransCamera() {
     return m_defaultPerspectiveCamera.get();
+}
+
+CamtransCamera *SupportCanvas3D::getCityCamera() {
+    return m_cityCamera.get();
 }
 
 void SupportCanvas3D::initializeGL() {
@@ -115,6 +121,7 @@ void SupportCanvas3D::paintGL() {
     float ratio = static_cast<QGuiApplication *>(QCoreApplication::instance())->devicePixelRatio();
     glViewport(0, 0, width() * ratio, height() * ratio);
     getCamera()->setAspectRatio(static_cast<float>(width()) / static_cast<float>(height()));
+    getCityCamera()->translate(m_cityManager->getCameraTranslation());
     m_currentScene->render(this);
 }
 

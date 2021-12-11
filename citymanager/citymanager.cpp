@@ -4,7 +4,9 @@
 #include <cmath>
 #include <iostream>
 
-CityManager::CityManager()
+CityManager::CityManager() :
+m_cameraCenter(glm::vec3(2.5f,2.5f,2.5f)),
+m_cameraTrajectory(glm::vec4(-0.02f,-0.01f,-0.01f, 0.0f))
 {
     m_scene = std::make_shared<SceneviewScene>();
     setUpScene();
@@ -62,4 +64,8 @@ void CityManager::addRoadsToScene() {
 
         m_scene->addPrimitive(primitive, translate * rotate * scale);
     }
+}
+
+glm::vec4 CityManager::getCameraTranslation() {
+    return m_cameraTrajectory;
 }

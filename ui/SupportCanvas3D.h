@@ -41,6 +41,7 @@ public:
     Camera *getCamera();
     OrbitingCamera *getOrbitingCamera();
     CamtransCamera *getCamtransCamera();
+    CamtransCamera *getCityCamera();
 
     // Returns a pointer to the current scene. If no scene is loaded, this function returns nullptr.
     OpenGLScene *getScene() { return m_currentScene; }
@@ -107,6 +108,7 @@ private:
     bool m_settingsDirty;
 
     std::unique_ptr<CamtransCamera> m_defaultPerspectiveCamera;
+    std::unique_ptr<CamtransCamera> m_cityCamera;
     std::unique_ptr<OrbitingCamera> m_defaultOrbitingCamera;
     OpenGLScene *m_currentScene;
     std::unique_ptr<ShapesScene> m_shapesScene;

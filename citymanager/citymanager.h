@@ -18,11 +18,14 @@ public:
     CityManager();
 
     OpenGLScene* getScene();
+    glm::vec4 getCameraTranslation();
 
 private:
     std::shared_ptr<SceneviewScene> m_scene;
     std::vector<glm::vec2> m_roadVertices;
     std::vector<Edge> m_roadEdges;
+    glm::vec3 m_cameraCenter;
+    glm::vec4 m_cameraTrajectory;
 
     void generateRoads();
     void addRoadsToScene();
