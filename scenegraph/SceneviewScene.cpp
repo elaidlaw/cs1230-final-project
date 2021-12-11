@@ -7,6 +7,7 @@
 #include "SupportCanvas3D.h"
 #include "ResourceLoader.h"
 #include "gl/shaders/CS123Shader.h"
+#include <iostream>
 using namespace CS123::GL;
 
 

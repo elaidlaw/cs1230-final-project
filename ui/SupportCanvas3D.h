@@ -7,6 +7,7 @@
 #include <QGLWidget>
 
 #include "glm/glm.hpp"
+#include "citymanager/citymanager.h"
 
 class RGBA;
 class Camera;
@@ -54,6 +55,7 @@ public:
 
     // This function will be called by the UI when the settings have changed.
     virtual void settingsChanged();
+    void startCityManager();
 
 public slots:
     // These will be called by the corresponding UI buttons on the Camtrans dock
@@ -70,7 +72,6 @@ public slots:
     void updateCameraRotationV();
     void updateCameraRotationN();
     void updateCameraClip();
-    void startCityManager();
 
 signals:
     void aspectRatioChanged();
@@ -110,6 +111,7 @@ private:
     OpenGLScene *m_currentScene;
     std::unique_ptr<ShapesScene> m_shapesScene;
     std::unique_ptr<SceneviewScene> m_sceneviewScene;
+    std::unique_ptr<CityManager> m_cityManager;
 };
 
 #endif // SUPPORTCANVAS3D_H

@@ -11,11 +11,13 @@
 #include <math.h>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <iostream>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+
     // Make sure the settings are loaded before the UI
     settings.loadSettingsOrDefaults();
 
@@ -105,6 +107,9 @@ MainWindow::MainWindow(QWidget *parent) :
     show();
     ui->tabWidget->setCurrentWidget(widget);
     show();
+
+    activateCanvas3D();
+    m_canvas3D->startCityManager();
 
 }
 

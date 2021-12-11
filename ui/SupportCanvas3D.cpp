@@ -104,6 +104,7 @@ void SupportCanvas3D::initializeOpenGLSettings() {
 void SupportCanvas3D::initializeScenes() {
     m_sceneviewScene = std::make_unique<SceneviewScene>();
     m_shapesScene = std::make_unique<ShapesScene>(width(), height());
+    m_cityManager = std::make_unique<CityManager>();
 }
 
 void SupportCanvas3D::paintGL() {
@@ -136,6 +137,7 @@ void SupportCanvas3D::setSceneFromSettings() {
             setSceneToSceneview();
             break;
     }
+    m_currentScene = m_cityManager->getScene();
     m_settingsDirty = false;
 }
 
@@ -279,4 +281,8 @@ void SupportCanvas3D::wheelEvent(QWheelEvent *event) {
 
 void SupportCanvas3D::resizeEvent(QResizeEvent *event) {
     emit aspectRatioChanged();
+}
+
+void SupportCanvas3D::startCityManager() {
+
 }
