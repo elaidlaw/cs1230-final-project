@@ -5,8 +5,8 @@
 #include <iostream>
 
 CityManager::CityManager() :
-m_cameraCenter(glm::vec3(2.5f,2.5f,2.5f)),
-m_cameraTrajectory(glm::vec4(-0.02f,-0.01f,-0.01f, 0.0f))
+m_cameraCenter(glm::vec3(5.5f,2.5f,5.5f)),
+m_cameraTrajectory(glm::vec4(-0.01f,-0.000001f,-0.01f, 0.0f))
 {
     m_scene = std::make_shared<SceneviewScene>();
     setUpScene();

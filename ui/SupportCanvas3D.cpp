@@ -24,6 +24,11 @@ SupportCanvas3D::SupportCanvas3D(QGLFormat format, QWidget *parent) : QGLWidget(
     m_defaultOrbitingCamera(new OrbitingCamera()),
     m_currentScene(nullptr)
 {
+
+    //Timer to re-render the city
+    QTimer *timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, QOverload<>::of(&SupportCanvas3D::update));
+    timer->start(30);
 }
 
 SupportCanvas3D::~SupportCanvas3D()
