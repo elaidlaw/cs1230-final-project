@@ -32,6 +32,7 @@ SOURCES += \
     camera/CamtransCamera.cpp \
     camera/QuaternionCamera.cpp \
     citymanager/citymanager.cpp \
+    citymanager/citytile.cpp \
     filter/filterutils.cpp \
     scenegraph/Scene.cpp \
     scenegraph/OpenGLScene.cpp \
@@ -91,6 +92,7 @@ HEADERS += \
     camera/CamtransCamera.h \
     camera/QuaternionCamera.h \
     citymanager/citymanager.h \
+    citymanager/citytile.h \
     filter/filterutils.h \
     scenegraph/Scene.h \
     scenegraph/OpenGLScene.h \

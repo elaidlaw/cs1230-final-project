@@ -118,10 +118,18 @@ void Scene::addPrimitive(const CS123ScenePrimitive &scenePrimitive, const glm::m
     m_primitives.push_back(std::make_shared<CS123ScenePrimitive>(scenePrimitive));
     m_transforms.push_back(std::make_shared<glm::mat4x4>(matrix));
     //also add the QImage for texture mapping
-    QString filePath = QString::fromStdString(scenePrimitive.material.textureMap.filename);
-    QImage textureImage = QImage(filePath);
+//    QString filePath = QString::fromStdString(scenePrimitive.material.textureMap.filename);
+//    QImage textureImage = QImage(filePath);
+    QImage textureImage = QImage();
     m_primitiveTextures.push_back(std::make_shared<QImage>(textureImage));
     m_blendValues.push_back(scenePrimitive.material.blend);
+}
+
+void Scene::clearPrimitives(){
+    m_primitives = std::vector<std::shared_ptr<CS123ScenePrimitive>>();
+    m_transforms = std::vector<std::shared_ptr<glm::mat4x4>>();
+    m_primitiveTextures = std::vector<std::shared_ptr<QImage>>();
+    m_blendValues = std::vector<float>();
 }
 
 void Scene::addLight(const CS123SceneLightData &sceneLight) {

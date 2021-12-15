@@ -33,6 +33,9 @@ public:
     // Adds a primitive to the scene.
     virtual void addPrimitive(const CS123ScenePrimitive &scenePrimitive, const glm::mat4x4 &matrix);
 
+    //Clears all primitives from the scene
+    void clearPrimitives();
+
     // Adds a light to the scene.
     virtual void addLight(const CS123SceneLightData &sceneLight);
 
