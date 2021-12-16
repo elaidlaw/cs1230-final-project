@@ -108,6 +108,7 @@ void SupportCanvas3D::initializeOpenGLSettings() {
     // the default).
     glFrontFace(GL_CCW);
 
+
     // Calculate the orbiting camera matrices.
     getOrbitingCamera()->updateMatrices();
 }

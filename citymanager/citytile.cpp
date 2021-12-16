@@ -131,6 +131,7 @@ void CityTile::loadTile() {
 
 void CityTile::buildPrimitives(){
 
+
     for (Edge e : m_map.edges) {
         glm::vec2 v1 = m_map.vertices[e.v1];
         glm::vec2 v2 = m_map.vertices[e.v2];
@@ -141,7 +142,7 @@ void CityTile::buildPrimitives(){
 //        primitive.material.cDiffuse = glm::vec4(1, 1, 1, 1);
 //        primitive.material.cAmbient = glm::vec4(1, 1, 1, 1);
         primitive.material.cDiffuse = glm::vec4(0.5, 0.5, 0.5, 0.5);
-        primitive.material.cAmbient = glm::vec4(0.1, 0.1, 0.1, 0.1);
+        primitive.material.cAmbient = glm::vec4(0.2, 0.2, 0.2, 0.1);
 
         // make the roads .05 thick, .2 wide, and the length of the distance between v1 and v2 (plus a little extra so it doesn't look weird)
         glm::mat4 scale = glm::scale(glm::vec3(glm::length(diff) + 1, 0.1f, 1));
@@ -164,6 +165,18 @@ void CityTile::buildPrimitives(){
         m_primitives.push_back(primitive);
         m_transforms.push_back(m_tileTransform * translate*rotate*scale);
     }
+
+    CS123ScenePrimitive primitive;
+    primitive.type = PrimitiveType::PRIMITIVE_CUBE;
+    primitive.material.cDiffuse = glm::vec4(0, 0, 0, 0.1);
+    primitive.material.cAmbient = glm::vec4(0.1, 0.1, 0.1, 0.9);
+
+    // make the roads .05 thick, .2 wide, and the length of the distance between v1 and v2 (plus a little extra so it doesn't look weird)
+    glm::mat4 scale = glm::scale(glm::vec3(100, 1, 100));
+    glm::mat4 translate = glm::translate(glm::vec3(50, -0.5, 50));
+
+    m_primitives.push_back(primitive);
+    m_transforms.push_back(m_tileTransform * translate*scale);
 
 }
 

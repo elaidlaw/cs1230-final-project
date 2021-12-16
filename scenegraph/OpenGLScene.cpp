@@ -12,7 +12,7 @@ void OpenGLScene::setClearColor() {
     if (settings.drawWireframe || settings.drawNormals) {
         glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
     } else {
-        glClearColor(0, 0, 0, 0);
+        glClearColor(.9, .96, .995, 1);
     }
 }
 
