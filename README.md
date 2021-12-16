@@ -31,5 +31,5 @@ To color the buildings, we have four different distributions: one for concrete, 
 we vary the probability by which we draw a color from each of the distributions. For instance, if the building is tall, we'll be more likely to draw from the concrete or glass
 distribution than if the building is short.
 
-To navigate the city, we've implemented a random camera trajectory that uses Bezier curves to remain smooth as it travels. We also added atmospheric perspective in the form of
+To navigate the city, we've implemented a random camera trajectory that uses Bezier curves to remain smooth as it travels. A momemtum term is used when choosing the next Bezier curve so that there are no sharp turns in the camera path. We also added atmospheric perspective in the form of
 a "fog" that blends distant buildings into the sky.
