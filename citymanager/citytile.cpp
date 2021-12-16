@@ -101,7 +101,7 @@ void CityTile::generateRoads()
 }
 
 void CityTile::loadTile() {
-    std::ifstream infile("C:/Users/laidl/Documents/Brown/CS 123/voronoi_test/2.txt");
+    std::ifstream infile("C:/Users/laidl/Documents/Brown/CS 123/voronoi_test/" + std::to_string(rand() % 8) + ".txt");
 
     std::vector<Edge> roadEdges = std::vector<Edge>();
     std::vector<glm::vec2> roadVertices = std::vector<glm::vec2>();
