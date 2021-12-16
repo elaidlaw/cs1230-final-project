@@ -33,10 +33,12 @@ void CityManager::setUpScene() {
     CS123SceneGlobalData global;
     global.ka = 0.5;
     global.kd = 0.5;
+    global.ks = 0.2;
 
     CS123SceneLightData light;
     light.type = LightType::LIGHT_DIRECTIONAL;
-    light.dir = glm::normalize(glm::vec4(-1, -1, -1, 0));
+    light.dir = glm::normalize(glm::vec4(-1, -0.1, -0.5, 0));
+//    light.pos = glm::normalize(glm::vec4(-1, -1, -1, 1.));
     light.color = glm::vec4(1, 1, 1, 1);
 
     m_scene->setGlobal(global);

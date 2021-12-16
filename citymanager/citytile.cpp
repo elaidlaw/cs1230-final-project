@@ -1,6 +1,46 @@
 #include "citytile.h"
 #include <glm/gtx/transform.hpp>
 
+#include <iostream>
+
+/**
+ * Returns a pseudo-random value between -1.0 and 1.0 for the given row and
+ * column.
+ */
+float randValue(int row, int col)
+{
+    return glm::fract(sin(row * 127.1f + col * 311.7f) * 43758.5453123f);
+}
+
+float perlinNoise(float x, float z){
+    float y = 0.f;
+    int lowOctave = 0;
+    int highOctave = 3;
+
+    for(int octave = lowOctave; octave <= highOctave; octave++){
+        float octavePower = glm::exp2(static_cast<float>(octave));
+        float rowPosition = x / (20. / octavePower) + 100. * octave;
+        float colPosition = z / (20. / octavePower) + 100. * octave;
+        float A = randValue(glm::floor(rowPosition), glm::floor(colPosition));
+        float B = randValue(glm::floor(rowPosition), glm::ceil(colPosition));
+        float C = randValue(glm::ceil(rowPosition), glm::floor(colPosition));
+        float D = randValue(glm::ceil(rowPosition), glm::ceil(colPosition));
+
+    //    Bilinear Interpolation
+    //        float abMix = glm::mix(A, B, glm::fract(colPosition));
+    //        float cdMix = glm::mix(C, D, glm::fract(colPosition));
+    //        position.y += glm::mix(abMix, cdMix, glm::fract(rowPosition)) / octavePower;
+
+    //    Bicubic Interpolation
+        float x = glm::fract(colPosition);
+        float abMix = glm::mix(A, B, x*x*(3-2*x));
+        float cdMix = glm::mix(C, D, x*x*(3-2*x));
+        x = glm::fract(rowPosition);
+        y += glm::mix(abMix, cdMix, x*x*(3-2*x)) / octavePower;
+    }
+    return y;
+}
+
 CityTile::CityTile(float centerX, float centerZ, float sideLength = 20, int blocks = 10) :
     centerX(centerX),
     centerZ(centerZ),
@@ -61,11 +101,15 @@ void CityTile::buildPrimitives(){
         glm::vec2 midpoint = (v1 + v2) / 2.0f;
         CS123ScenePrimitive primitive;
         primitive.type = PrimitiveType::PRIMITIVE_CUBE;
-        primitive.material.cDiffuse = glm::vec4(1, 1, 1, 1);
-        primitive.material.cAmbient = glm::vec4(1, 1, 1, 1);
+//        primitive.material.cDiffuse = glm::vec4(1, 1, 1, 1);
+//        primitive.material.cAmbient = glm::vec4(1, 1, 1, 1);
+        primitive.material.cDiffuse = glm::vec4(0.5, 0.5, 0.5, 0.5);
+        primitive.material.cAmbient = glm::vec4(0.1, 0.1, 0.1, 0.1);
 
         // make the roads .05 thick, .2 wide, and the length of the distance between v1 and v2 (plus a little extra so it doesn't look weird)
-        glm::mat4 scale = glm::scale(glm::vec3(glm::length(diff) + 0.2, 0.05, 0.2));
+        float thickness = perlinNoise(midpoint[0], midpoint[1]);
+        std::cout << thickness << std::endl;
+        glm::mat4 scale = glm::scale(glm::vec3(glm::length(diff) + 0.2, thickness, 0.2));
         glm::mat4 rotate = glm::rotate(-atan2f(diff.y, diff.x), glm::vec3(0, 1, 0));
         glm::mat4 translate = glm::translate(glm::vec3(midpoint.x, 0, midpoint.y));
 
