@@ -1,8 +1,10 @@
 #ifndef CITYTILE_H
 #define CITYTILE_H
 
+#include "scenegraph/SceneviewScene.h"
 #include <vector>
 #include <glm.hpp>
+
 
 struct Edge {
     int v1;
@@ -27,6 +29,8 @@ class CityTile
 public:
     CityTile(float centerX, float centerZ, float sideLength, int blocks);
     RoadMap getRoads();
+    std::vector<CS123ScenePrimitive> getPrimitives();
+    std::vector<glm::mat4x4> getTransforms();
     float centerX;
     float centerZ;
 
@@ -36,7 +40,10 @@ private:
     float m_sideLength;
     int m_blocks; //side length in city blocks
     RoadMap m_map;
+    std::vector<CS123ScenePrimitive> m_primitives;
+    std::vector<glm::mat4x4> m_transforms;
     void generateRoads();
+    void buildPrimitives();
 };
 
 #endif // CITYTILE_H

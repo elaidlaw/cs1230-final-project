@@ -85,6 +85,8 @@ void CityManager::initializeTiles(){
             m_tiles.push_back(newTile);
         }
     }
+//    addRoadsToScene();
+    addTilesToScene();
 }
 
 void CityManager::updateTiles(){
@@ -119,6 +121,22 @@ void CityManager::updateTiles(){
             }
         }
     }
+//    addRoadsToScene();
+    addTilesToScene();
+}
+
+void CityManager::addTilesToScene(){
+    std::vector<CS123ScenePrimitive> allPrimitives;
+    std::vector<glm::mat4x4> allTransforms;
+    for (CityTile tile: m_tiles) {
+        std::vector<CS123ScenePrimitive> primitives = tile.getPrimitives();
+        std::vector<glm::mat4x4> transforms = tile.getTransforms();
+        for (int i=0; i < primitives.size(); i++){
+            allPrimitives.push_back(primitives[i]);
+            allTransforms.push_back(transforms[i]);
+        }
+    }
+    m_scene->loadPrimitives(allPrimitives, allTransforms);
 }
 
 void CityManager::addRoadsToScene() {

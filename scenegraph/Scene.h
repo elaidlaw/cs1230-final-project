@@ -2,6 +2,7 @@
 #define SCENE_H
 
 #include "CS123SceneData.h"
+
 #include <memory>
 #include <QImage>
 #include <QString>
@@ -35,6 +36,10 @@ public:
 
     //Clears all primitives from the scene
     void clearPrimitives();
+
+    //Loads primitives from tiles
+//    void loadTiles(std::vector<CityTile> tiles);
+    void loadPrimitives(std::vector<CS123ScenePrimitive> primitives, std::vector<glm::mat4x4> transforms);
 
     // Adds a light to the scene.
     virtual void addLight(const CS123SceneLightData &sceneLight);

@@ -132,6 +132,24 @@ void Scene::clearPrimitives(){
     m_blendValues = std::vector<float>();
 }
 
+//void Scene::loadTiles(std::vector<CityTile> tiles){
+//    clearPrimitives();
+//    for (CityTile tile: tiles) {
+//        std::vector<CS123ScenePrimitive> primitives = tile.getPrimitives();
+//        std::vector<glm::mat4x4> transforms = tile.getTransforms();
+//        for (int i=0; i < primitives.size(); i++){
+//            addPrimitive(primitives[i], transforms[i]);
+//        }
+//    }
+//}
+
+void Scene::loadPrimitives(std::vector<CS123ScenePrimitive> primitives, std::vector<glm::mat4x4> transforms){
+   clearPrimitives();
+   for (int i=0; i < primitives.size(); i++){
+       addPrimitive(primitives[i], transforms[i]);
+   }
+}
+
 void Scene::addLight(const CS123SceneLightData &sceneLight) {
     m_lightData.push_back(std::make_shared<CS123SceneLightData>(sceneLight));
 }

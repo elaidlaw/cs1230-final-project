@@ -115,7 +115,7 @@ void SupportCanvas3D::initializeOpenGLSettings() {
 void SupportCanvas3D::initializeScenes() {
     m_sceneviewScene = std::make_unique<SceneviewScene>();
     m_shapesScene = std::make_unique<ShapesScene>(width(), height());
-    m_cityManager = std::make_unique<CityManager>(100.f, 20.f, 10); //pass in bufferDistance, tileSize, blockSize
+    m_cityManager = std::make_unique<CityManager>(35.f, 20.f, 10); //pass in bufferDistance, tileSize, blockSize
 }
 
 void SupportCanvas3D::paintGL() {
@@ -128,7 +128,6 @@ void SupportCanvas3D::paintGL() {
     getCamera()->setAspectRatio(static_cast<float>(width()) / static_cast<float>(height()));
     getCityCamera()->translate(m_cityManager->getCameraTranslation());
     m_cityManager->updateTiles();
-    m_cityManager->addRoadsToScene();
     m_currentScene = m_cityManager->getScene();
     m_currentScene->render(this);
 }

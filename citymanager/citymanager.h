@@ -31,6 +31,7 @@ private:
 //    void generateRoads();
     void initializeTiles();
     void setUpScene();
+    void addTilesToScene();
 };
 
 #endif // CITYMANAGER_H
