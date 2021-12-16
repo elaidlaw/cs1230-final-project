@@ -126,7 +126,8 @@ void SupportCanvas3D::paintGL() {
     float ratio = static_cast<QGuiApplication *>(QCoreApplication::instance())->devicePixelRatio();
     glViewport(0, 0, width() * ratio, height() * ratio);
     getCamera()->setAspectRatio(static_cast<float>(width()) / static_cast<float>(height()));
-    getCityCamera()->translate(m_cityManager->getCameraTranslation());
+//    getCityCamera()->translate(m_cityManager->getCameraTranslation());
+    getCityCamera()->orientLook(m_cityManager->nextCameraPosition(), m_cityManager->getLookVector(), glm::vec4(0.f,1.f,0.f,0.f));
     m_cityManager->updateTiles();
     m_currentScene = m_cityManager->getScene();
     m_currentScene->render(this);

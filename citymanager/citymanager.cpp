@@ -11,7 +11,10 @@ m_tileSize(tileSize),
 m_blockSize(blockSize),
 m_tiles(std::vector<CityTile>()),
 m_cameraCenter(glm::vec3(5.5f,2.5f,5.5f)),
-m_cameraTrajectory(glm::vec4(-0.1f,-0.0000001f,-0.1f, 0.0f))
+m_cameraTranslation(glm::vec4(-0.1f,-0.0000001f,-0.1f, 0.0f)),
+m_cameraTrajectory(BezierCurve()),
+m_curvePosition(0.f)
+
 //m_cameraTrajectory(glm::vec4(-0.01f,-0.000001f,-0.01f, 0.0f))
 {
     m_scene = std::make_shared<SceneviewScene>();
@@ -19,7 +22,7 @@ m_cameraTrajectory(glm::vec4(-0.1f,-0.0000001f,-0.1f, 0.0f))
     setUpScene();
     //generateRoads();
     initializeTiles();
-    addRoadsToScene();
+//    addRoadsToScene();
 }
 
 OpenGLScene* CityManager::getScene() {
@@ -30,10 +33,12 @@ void CityManager::setUpScene() {
     CS123SceneGlobalData global;
     global.ka = 0.5;
     global.kd = 0.5;
+    global.ks = 0.2;
 
     CS123SceneLightData light;
     light.type = LightType::LIGHT_DIRECTIONAL;
-    light.dir = glm::normalize(glm::vec4(-1, -1, -1, 0));
+    light.dir = glm::normalize(glm::vec4(-1, -0.1, -0.5, 0));
+//    light.pos = glm::normalize(glm::vec4(-1, -1, -1, 1.));
     light.color = glm::vec4(1, 1, 1, 1);
 
     m_scene->setGlobal(global);
@@ -92,7 +97,6 @@ void CityManager::initializeTiles(){
 void CityManager::updateTiles(){
 
     std::vector<CityTile> validTiles = std::vector<CityTile>();
-    std::cout << glm::to_string(m_cameraCenter-m_lastCameraCenter) << std::endl;
 //    remove all of the tiles that are now further than buffer distance
     for (CityTile tile: m_tiles) {
         if (abs(tile.centerX - m_cameraCenter.x) < (m_bufferDistance + 0.5*m_tileSize) && abs(tile.centerZ - m_cameraCenter.z) < (m_bufferDistance + 0.5*m_tileSize)){
@@ -183,8 +187,34 @@ void CityManager::addRoadsToScene() {
 //    }
 //}
 
+glm::vec4 CityManager::nextCameraPosition() {
+    float bezierIncrement = 0.02f;
+    float bezierSegmentLength = 1.5f;
+    m_curvePosition = m_curvePosition + bezierIncrement;
+
+    //new bezier curve if we got to the end of the last one
+    if (m_curvePosition > 1.f) {
+        m_curvePosition -= 1.f;
+        m_cameraTrajectory = BezierCurve(m_cameraTrajectory.lastPoint(), m_cameraTrajectory.lastDirection(), bezierSegmentLength);
+    }
+
+    //get camera center from curve
+    glm::vec2 newCenter = m_cameraTrajectory.getPosition(m_curvePosition);
+
+    m_lastCameraCenter = glm::vec3(m_cameraCenter);
+    m_cameraCenter = glm::vec3(newCenter[0], m_cameraCenter[1], newCenter[1]);
+    return glm::vec4(m_cameraCenter, 1.f);
+}
+
+glm::vec4 CityManager::getLookVector() {
+    float verticalComponent = -0.02;
+    glm::vec2 planarLook = m_cameraTrajectory.getDerivative(m_curvePosition);
+    glm::vec4 look = glm::vec4(glm::normalize(glm::vec3(planarLook[0], verticalComponent, planarLook[1])), 0.f);
+    return look;
+}
+
 glm::vec4 CityManager::getCameraTranslation() {
     m_lastCameraCenter = glm::vec3(m_cameraCenter);
-    m_cameraCenter = m_cameraCenter + glm::vec3(m_cameraTrajectory);
-    return m_cameraTrajectory;
+    m_cameraCenter += m_cameraTranslation;
+    return glm::vec4(m_cameraTranslation, 0.f);
 }
