@@ -10,7 +10,7 @@ m_bufferDistance(bufferDistance),
 m_tileSize(tileSize),
 m_blockSize(blockSize),
 m_tiles(std::vector<CityTile>()),
-m_cameraCenter(glm::vec3(5.5f,2.5f,5.5f)),
+m_cameraCenter(glm::vec3(5.5f,10.0f,5.5f)),
 m_cameraTranslation(glm::vec4(-0.1f,-0.0000001f,-0.1f, 0.0f)),
 m_cameraTrajectory(BezierCurve()),
 m_curvePosition(0.f)

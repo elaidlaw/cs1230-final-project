@@ -121,7 +121,8 @@ void CityTile::loadTile() {
         if (type == 'b') {
             float x, y, a, w, h;
             infile >> x >> y >> a >> w >> h;
-            buildings.push_back(Building(glm::vec2(x, y), glm::vec2(w, h), a, 0.1));
+            glm::vec4 pos = m_tileTransform * glm::vec4(x, 0, y, 1);
+            buildings.push_back(Building(glm::vec2(x, y), glm::vec2(w, h), a, perlinNoise(pos.x, pos.z) * 5));
         }
     }
 
@@ -143,9 +144,7 @@ void CityTile::buildPrimitives(){
         primitive.material.cAmbient = glm::vec4(0.1, 0.1, 0.1, 0.1);
 
         // make the roads .05 thick, .2 wide, and the length of the distance between v1 and v2 (plus a little extra so it doesn't look weird)
-        float thickness = perlinNoise(midpoint[0], midpoint[1]);
-        std::cout << thickness << std::endl;
-        glm::mat4 scale = glm::scale(glm::vec3(glm::length(diff) + 1, thickness, 1));
+        glm::mat4 scale = glm::scale(glm::vec3(glm::length(diff) + 1, 0.1f, 1));
         glm::mat4 rotate = glm::rotate(-atan2f(diff.y, diff.x), glm::vec3(0, 1, 0));
         glm::mat4 translate = glm::translate(glm::vec3(midpoint.x, 0, midpoint.y));
 
