@@ -4,6 +4,7 @@
 #include "scenegraph/SceneviewScene.h"
 #include <memory>
 #include "citytile.h"
+#include "beziercurve.h"
 
 class CityManager
 {
@@ -14,6 +15,8 @@ public:
     void updateTiles();
     void addRoadsToScene();
     glm::vec4 getCameraTranslation();
+    glm::vec4 nextCameraPosition();
+    glm::vec4 getLookVector();
 
 private:
     float m_bufferDistance; //max distance at which city is rendered
@@ -26,7 +29,9 @@ private:
 
     glm::vec3 m_lastCameraCenter;
     glm::vec3 m_cameraCenter;
-    glm::vec4 m_cameraTrajectory;
+    glm::vec3 m_cameraTranslation;
+    BezierCurve m_cameraTrajectory;
+    float m_curvePosition; //camera position on the current Bezier curve
 
 //    void generateRoads();
     void initializeTiles();

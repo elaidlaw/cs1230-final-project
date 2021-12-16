@@ -31,6 +31,7 @@ SOURCES += \
     camera/OrbitingCamera.cpp \
     camera/CamtransCamera.cpp \
     camera/QuaternionCamera.cpp \
+    citymanager/beziercurve.cpp \
     citymanager/citymanager.cpp \
     citymanager/citytile.cpp \
     filter/filterutils.cpp \
@@ -91,6 +92,7 @@ HEADERS += \
     camera/OrbitingCamera.h \
     camera/CamtransCamera.h \
     camera/QuaternionCamera.h \
+    citymanager/beziercurve.h \
     citymanager/citymanager.h \
     citymanager/citytile.h \
     filter/filterutils.h \
