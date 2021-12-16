@@ -32,6 +32,7 @@ SOURCES += \
     camera/CamtransCamera.cpp \
     camera/QuaternionCamera.cpp \
     citymanager/beziercurve.cpp \
+    citymanager/buildingcolor.cpp \
     citymanager/citymanager.cpp \
     citymanager/citytile.cpp \
     filter/filterutils.cpp \
@@ -93,6 +94,7 @@ HEADERS += \
     camera/CamtransCamera.h \
     camera/QuaternionCamera.h \
     citymanager/beziercurve.h \
+    citymanager/buildingcolor.h \
     citymanager/citymanager.h \
     citymanager/citytile.h \
     filter/filterutils.h \
