@@ -69,6 +69,22 @@ public:
     // Sets the near and far clip planes for this camera.
     void setClip(float nearPlane, float farPlane);
 
+    glm::vec4 getU() const;
+    glm::vec4 getV() const;
+    glm::vec4 getW() const;
+
+
+
+private:
+    float m_aspectRatio;
+    float m_near;
+    float m_far;
+    glm::mat4 m_translationMatrix, m_perspectiveTransformation;
+    glm::mat4 m_scaleMatrix, m_rotationMatrix;
+    float m_thetaH, m_thetaWTan;
+    glm::vec4 m_eye, m_up;
+    glm::vec4 m_u, m_v, m_w;
+
     void updateProjectionMatrix();
     void updatePerspectiveMatrix();
     void updateScaleMatrix();
@@ -76,25 +92,6 @@ public:
     void updateRotationMatrix();
     void updateTranslationMatrix();
 
-    glm::vec4 getU() const;
-    glm::vec4 getV() const;
-    glm::vec4 getW() const;
-
-private:
-    float m_aspectRatio;
-    float m_near;
-    float m_far;
-    glm::mat4 m_translationMatrix;
-    glm::mat4 m_perspectiveTransformation;
-    glm::mat4 m_scaleMatrix;
-    glm::mat4 m_rotationMatrix;
-    float m_thetaH;
-    float m_thetaW;
-    glm::vec4 m_eye;
-    glm::vec4 m_up;
-    glm::vec4 m_u;
-    glm::vec4 m_v;
-    glm::vec4 m_w;
 };
 
 #endif // CAMTRANSCAMERA_H

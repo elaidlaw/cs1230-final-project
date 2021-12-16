@@ -7,184 +7,165 @@
 
 #include "CamtransCamera.h"
 #include <Settings.h>
-#include <math.h>
-#include <glm/gtx/transform.hpp>
 
 CamtransCamera::CamtransCamera()
 {
     // @TODO: [CAMTRANS] Fill this in...
-    setClip(1.f, 30.f);
-    setHeightAngle(60.f);
-    setAspectRatio(1.f);
-    translate(glm::vec4(2.f,2.f,2.f,0.f));
-    orientLook(glm::vec4(2.f, 2.f, 2.f, 1.f), glm::vec4(-1.f,-1.f,-1.f,0.f), glm::vec4(0.f,1.f,0.f,0.f));
-
+    setClip(1, 100);
+    setHeightAngle(60);
+    setAspectRatio(1);
+    orientLook(glm::vec4(2, 2, 2, 1), glm::vec4(-1, -1, -1, 0), glm::vec4(0, 1, 0, 0));
 }
 
 void CamtransCamera::setAspectRatio(float a)
 {
+    // @TODO: [CAMTRANS] Fill this in...
     m_aspectRatio = a;
+    m_thetaWTan = a * glm::tan(glm::radians(m_thetaH / 2));
     updateProjectionMatrix();
 }
 
 glm::mat4x4 CamtransCamera::getProjectionMatrix() const {
-    return m_perspectiveTransformation*m_scaleMatrix;
+    // @TODO: [CAMTRANS] Fill this in...
+
+    return m_perspectiveTransformation * m_scaleMatrix;
 }
 
 glm::mat4x4 CamtransCamera::getViewMatrix() const {
-    return m_rotationMatrix*m_translationMatrix;
+    // @TODO: [CAMTRANS] Fill this in...
+    return m_rotationMatrix * m_translationMatrix;
 }
 
 glm::mat4x4 CamtransCamera::getScaleMatrix() const {
+    // @TODO: [CAMTRANS] Fill this in...
     return m_scaleMatrix;
 }
 
 glm::mat4x4 CamtransCamera::getPerspectiveMatrix() const {
+    // @TODO: [CAMTRANS] Fill this in...
     return m_perspectiveTransformation;
 }
 
 glm::vec4 CamtransCamera::getPosition() const {
+    // @TODO: [CAMTRANS] Fill this in...
     return m_eye;
 }
 
 glm::vec4 CamtransCamera::getLook() const {
-    return -1.f*m_w;
+    // @TODO: [CAMTRANS] Fill this in...
+    return -m_w;
 }
 
 glm::vec4 CamtransCamera::getUp() const {
+    // @TODO: [CAMTRANS] Fill this in...
     return m_up;
 }
 
 float CamtransCamera::getAspectRatio() const {
+    // @TODO: [CAMTRANS] Fill this in...
     return m_aspectRatio;
 }
 
 float CamtransCamera::getHeightAngle() const {
+    // @TODO: [CAMTRANS] Fill this in...
     return m_thetaH;
 }
 
 void CamtransCamera::orientLook(const glm::vec4 &eye, const glm::vec4 &look, const glm::vec4 &up) {
+    // @TODO: [CAMTRANS] Fill this in...
     m_eye = eye;
     m_up = up;
-    //TODO: Do we have to handle -y, +y look vectors?
-    m_w = glm::vec4(-1.f * glm::normalize(glm::vec3(look)), 0.f);
-//    m_u = glm::vec4(glm::normalize(glm::cross(glm::vec3(up), glm::vec3(m_w))), 0.f);
-//    m_v = glm::vec4(glm::cross(glm::vec3(m_w), glm::vec3(m_u)), 0.f);
-    m_v = up - glm::dot(glm::vec3(up), glm::vec3(m_w))*m_w;
-    m_u = glm::vec4(glm::cross(glm::vec3(m_v), glm::vec3(m_w)), 0.f);
+    m_w = glm::normalize(-look);
+    m_v = glm::normalize(up - glm::dot(up, m_w) * m_w);
+    m_u = glm::vec4(glm::cross(m_v.xyz(), m_w.xyz()), 0);
     updateViewMatrix();
     updateProjectionMatrix();
 }
 
 void CamtransCamera::setHeightAngle(float h) {
+    // @TODO: [CAMTRANS] Fill this in...
     m_thetaH = h;
+    m_thetaWTan = m_aspectRatio * glm::tan(glm::radians(h / 2));
     updateProjectionMatrix();
 }
 
 void CamtransCamera::translate(const glm::vec4 &v) {
-    m_eye = m_eye + v;
+    // @TODO: [CAMTRANS] Fill this in...
+    m_eye += glm::vec4(v.xyz(), 0);
     updateViewMatrix();
 }
 
 void CamtransCamera::rotateU(float degrees) {
     // @TODO: [CAMTRANS] Fill this in...
-    float radians = glm::radians(-degrees);
-    glm::mat4 invView = glm::inverse(getViewMatrix());
-    glm::vec3 newVCamSpace = cos(radians)*glm::vec3(0.f,1.f,0.f) - sin(radians)*glm::vec3(0.f,0.f,1.f);
-    glm::vec3 newWCamSpace = cos(radians)*glm::vec3(0.f,0.f,1.f) + sin(radians)*glm::vec3(0.f,1.f,0.f);
-    m_v = invView * glm::vec4(newVCamSpace, 1.f) - m_eye;
-    m_w = invView * glm::vec4(newWCamSpace, 1.f) - m_eye;
-    updateRotationMatrix();
+    glm::vec4 v = glm::cos(glm::radians(-degrees)) * m_v - glm::sin(glm::radians(-degrees)) * m_w;
+    glm::vec4 w = glm::sin(glm::radians(-degrees)) * m_v + glm::cos(glm::radians(-degrees)) * m_w;
+    m_v = v;
+    m_w = w;
+    updateViewMatrix();
 }
 
 void CamtransCamera::rotateV(float degrees) {
     // @TODO: [CAMTRANS] Fill this in...
-    float radians = glm::radians(-degrees);
-    glm::mat4 invView = glm::inverse(getViewMatrix());
-    glm::vec3 newUCamSpace = cos(radians)*glm::vec3(1.f,0.f,0.f) + sin(radians)*glm::vec3(0.f,0.f,1.f);
-    glm::vec3 newWCamSpace = cos(radians)*glm::vec3(0.f,0.f,1.f) - sin(radians)*glm::vec3(1.f,0.f,0.f);
-    m_u = invView * glm::vec4(newUCamSpace, 1.f) - m_eye;
-    m_w = invView * glm::vec4(newWCamSpace, 1.f) - m_eye;
-    updateRotationMatrix();
+    glm::vec4 u = glm::cos(glm::radians(-degrees)) * m_u - glm::sin(glm::radians(-degrees)) * -m_w;
+    glm::vec4 w = glm::sin(glm::radians(-degrees)) * m_u + glm::cos(glm::radians(-degrees)) * -m_w;
+    m_u = u;
+    m_w = -w;
+    updateViewMatrix();
 }
 
 void CamtransCamera::rotateW(float degrees) {
     // @TODO: [CAMTRANS] Fill this in...
-    float radians = glm::radians(-degrees);
-    glm::mat4 invView = glm::inverse(getViewMatrix());
-    glm::vec3 newVCamSpace = cos(radians)*glm::vec3(0.f,1.f,0.f) + sin(radians)*glm::vec3(1.f,0.f,0.f);
-    glm::vec3 newUCamSpace = cos(radians)*glm::vec3(1.f,0.f,0.f) - sin(radians)*glm::vec3(0.f,1.f,0.f);
-    m_v = invView * glm::vec4(newVCamSpace, 1.f) - m_eye;
-    m_u = invView * glm::vec4(newUCamSpace, 1.f) - m_eye;
-//    m_v = invView * glm::vec4(0.f, 1.f, 0.f, 0.f);
-//    m_u = invView * glm::vec4(1.f, 0.f, 0.f, 0.f);
-    updateRotationMatrix();
+    glm::vec4 u = glm::cos(glm::radians(-degrees)) * m_u - glm::sin(glm::radians(-degrees)) * m_v;
+    glm::vec4 v = glm::sin(glm::radians(-degrees)) * m_u + glm::cos(glm::radians(-degrees)) * m_v;
+    m_u = u;
+    m_v = v;
+    updateViewMatrix();
 }
 
 void CamtransCamera::setClip(float nearPlane, float farPlane) {
+    // @TODO: [CAMTRANS] Fill this in...
     m_near = nearPlane;
     m_far = farPlane;
+    updateProjectionMatrix();
 }
 
-void CamtransCamera::updateProjectionMatrix(){
-    updatePerspectiveMatrix();
+void CamtransCamera::updateProjectionMatrix() {
     updateScaleMatrix();
+    updatePerspectiveMatrix();
 }
 
-void CamtransCamera::updatePerspectiveMatrix(){
-    float c = -m_near/m_far;
-    m_perspectiveTransformation = glm::mat4(1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, -1.f/(1.f+c), -1.f, 0.f, 0.f, c/(1.f+c), 0.f);
+void CamtransCamera::updatePerspectiveMatrix() {
+    float c = -m_near / m_far;
+    m_perspectiveTransformation = glm::transpose(glm::mat4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1 / (1 + c), c / (1 + c), 0, 0, -1, 0));
 }
 
-void CamtransCamera::updateScaleMatrix(){
-
-    float height = m_far*tan(glm::radians(m_thetaH)/2.f);
-    float width = m_aspectRatio*height;
-    m_scaleMatrix = glm::mat4(1.f/width, 0.f, 0.f, 0.f, 0.f, 1.f/height, 0.f, 0.f, 0.f, 0.f, 1.f/m_far, 0.f, 0.f, 0.f, 0.f, 1.f);
+void CamtransCamera::updateScaleMatrix() {
+    float scaleX = 1 / (m_far * m_thetaWTan);
+    float scaleY = 1 / (m_far * glm::tan(glm::radians(m_thetaH / 2)));
+    m_scaleMatrix = glm::transpose(glm::mat4(scaleX, 0, 0, 0, 0, scaleY, 0, 0, 0, 0, 1 / m_far, 0, 0, 0, 0, 1));
 }
 
-void CamtransCamera::updateViewMatrix(){
+void CamtransCamera::updateViewMatrix() {
     updateTranslationMatrix();
     updateRotationMatrix();
 }
 
-void CamtransCamera::updateRotationMatrix(){
-//    float PI = 3.1415926535897932384626f;
-//    glm::vec3 vec1 = glm::vec3(0.f,0.f,1.f);
-//    glm::vec3 vec2 = glm::vec3(m_w);
-//    glm::vec3 rotation_axis = glm::normalize(glm::cross(vec1, vec2));
-//    float rotation_angle = atan2(glm::dot(vec1, vec2), glm::length(glm::cross(vec1, vec2)));
-//    if(rotation_angle < 0.f){
-//            rotation_angle = 2.f*PI - rotation_angle;
-//    }
-
-//    //Rodrigues Rotation Formula
-//    glm::mat3 rCross = glm::mat3(0.f, rotation_axis[2], -rotation_axis[1], -rotation_axis[2], 0.f, -rotation_axis[0], rotation_axis[1], -rotation_axis[0], 0.f);
-//    glm::mat3 firstTerm = glm::mat3(rotation_axis[0]*rotation_axis[0], rotation_axis[0]*rotation_axis[1], rotation_axis[0]*rotation_axis[2],\
-//                                    rotation_axis[1]*rotation_axis[0], rotation_axis[1]*rotation_axis[1], rotation_axis[1]*rotation_axis[2],\
-//                                    rotation_axis[2]*rotation_axis[0], rotation_axis[2]*rotation_axis[0], rotation_axis[2]*rotation_axis[0]);
-//    glm::mat3 firstTerm = glm::outerProduct(rotation_axis, rotation_axis);
-//    glm::mat3 secondTerm = sin(rotation_angle)*rCross;
-//    glm::mat3 thirdTerm = -1.f * cos(rotation_angle) * rCross * rCross;
-//    m_rotationMatrix = glm::mat4(firstTerm + secondTerm + thirdTerm);
-//    m_rotationMatrix = glm::rotate(glm::degrees(rotation_angle), rotation_axis);
-    m_rotationMatrix = glm::mat4(m_u[0], m_v[0], m_w[0], 0.f, m_u[1], m_v[1],m_w[1], 0.f, m_u[2], m_v[2], m_w[2], 0.f, 0.f, 0.f, 0.f, 1.f);
+void CamtransCamera::updateRotationMatrix() {
+    m_rotationMatrix = glm::transpose(glm::mat4(m_u.x, m_u.y, m_u.z, 0, m_v.x, m_v.y, m_v.z, 0, m_w.x, m_w.y, m_w.z, 0, 0, 0, 0, 1));
 }
 
-void CamtransCamera::updateTranslationMatrix(){
-    m_translationMatrix = glm::mat4(1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, -m_eye[0], -m_eye[1], -m_eye[2], 1.f);
+void CamtransCamera::updateTranslationMatrix() {
+    m_translationMatrix = glm::transpose(glm::mat4(1, 0, 0, -m_eye.x, 0, 1, 0, -m_eye.y, 0, 0, 1, -m_eye.z, 0, 0, 0, 1));
 }
 
 glm::vec4 CamtransCamera::getU() const {
     return m_u;
 }
 
-glm::vec4 CamtransCamera::getV() const{
+glm::vec4 CamtransCamera::getV() const {
     return m_v;
 }
 
-glm::vec4 CamtransCamera::getW() const{
+glm::vec4 CamtransCamera::getW() const {
     return m_w;
 }
-
-

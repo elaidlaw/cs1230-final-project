@@ -31,9 +31,9 @@ OpenGLScene* CityManager::getScene() {
 
 void CityManager::setUpScene() {
     CS123SceneGlobalData global;
-    global.ka = 0.5;
-    global.kd = 0.5;
-    global.ks = 0.2;
+    global.ka = 0.3;
+    global.kd = 0.7;
+    global.ks = 0;
 
     CS123SceneLightData light;
     light.type = LightType::LIGHT_DIRECTIONAL;

@@ -82,6 +82,9 @@ void main() {
             vec4 eyeDirection = normalize(vec4(0,0,0,1) - position_cameraSpace);
             float specIntensity = pow(max(0.0, dot(eyeDirection, lightReflection)), shininess);
             color += max (vec3(0), lightColors[i] * specular_color * specIntensity)*s;
+
+            float atmospheric = min(1, 1 / (.2 * sqrt(-position_cameraSpace.z)));
+            color = color * atmospheric + vec3(.9, .96, .995) * (1 - atmospheric);
         }
     } else {
         color = ambient_color*a + diffuse_color*d;
