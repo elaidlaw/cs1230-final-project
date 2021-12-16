@@ -2,6 +2,7 @@
 #include <glm/gtx/transform.hpp>
 
 #include <iostream>
+#include "math.h"
 
 /**
  * Returns a pseudo-random value between -1.0 and 1.0 for the given row and
@@ -9,7 +10,8 @@
  */
 float randValue(int row, int col)
 {
-    return glm::fract(sin(row * 127.1f + col * 311.7f) * 43758.5453123f);
+    float output = glm::fract(sin(row * 127.1f + col * 311.7f) * 43758.5453123f);
+    return pow(output/0.9, 10.0);
 }
 
 float perlinNoise(float x, float z){
@@ -17,10 +19,12 @@ float perlinNoise(float x, float z){
     int lowOctave = 0;
     int highOctave = 3;
 
+    float dispersionTerm = 4.;
+
     for(int octave = lowOctave; octave <= highOctave; octave++){
         float octavePower = glm::exp2(static_cast<float>(octave));
-        float rowPosition = x / (20. / octavePower) + 100. * octave;
-        float colPosition = z / (20. / octavePower) + 100. * octave;
+        float rowPosition = x / (dispersionTerm / octavePower) + 100. * octave;
+        float colPosition = z / (dispersionTerm / octavePower) + 100. * octave;
         float A = randValue(glm::floor(rowPosition), glm::floor(colPosition));
         float B = randValue(glm::floor(rowPosition), glm::ceil(colPosition));
         float C = randValue(glm::ceil(rowPosition), glm::floor(colPosition));
@@ -36,7 +40,7 @@ float perlinNoise(float x, float z){
         float abMix = glm::mix(A, B, x*x*(3-2*x));
         float cdMix = glm::mix(C, D, x*x*(3-2*x));
         x = glm::fract(rowPosition);
-        y += glm::mix(abMix, cdMix, x*x*(3-2*x)) / octavePower;
+        y += glm::mix(abMix, cdMix, x*x*(3-2*x)) / sqrt(octavePower);
     }
     return y;
 }
