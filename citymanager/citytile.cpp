@@ -1,4 +1,5 @@
 #include "citytile.h"
+#include "buildingcolor.h"
 #include <glm/gtx/transform.hpp>
 #include <fstream>
 #include <iostream>
@@ -13,7 +14,7 @@
 float randValue(int row, int col)
 {
     float output = glm::fract(sin(row * 127.1f + col * 311.7f) * 43758.5453123f);
-    return pow(output/0.9, 10.0);
+    return pow(output/0.94, 4.0);
 }
 
 float perlinNoise(float x, float z){
@@ -21,7 +22,7 @@ float perlinNoise(float x, float z){
     int lowOctave = 0;
     int highOctave = 3;
 
-    float dispersionTerm = 4.;
+    float dispersionTerm = 5.;
 
     for(int octave = lowOctave; octave <= highOctave; octave++){
         float octavePower = glm::exp2(static_cast<float>(octave));
@@ -101,7 +102,7 @@ void CityTile::generateRoads()
 }
 
 void CityTile::loadTile() {
-    std::ifstream infile("C:/Users/laidl/Documents/Brown/CS 123/voronoi_test/2.txt");
+    std::ifstream infile("F:/Brown/cs1230/2.txt");
 
     std::vector<Edge> roadEdges = std::vector<Edge>();
     std::vector<glm::vec2> roadVertices = std::vector<glm::vec2>();
@@ -138,8 +139,6 @@ void CityTile::buildPrimitives(){
         glm::vec2 midpoint = (v1 + v2) / 2.0f;
         CS123ScenePrimitive primitive;
         primitive.type = PrimitiveType::PRIMITIVE_CUBE;
-//        primitive.material.cDiffuse = glm::vec4(1, 1, 1, 1);
-//        primitive.material.cAmbient = glm::vec4(1, 1, 1, 1);
         primitive.material.cDiffuse = glm::vec4(0.5, 0.5, 0.5, 0.5);
         primitive.material.cAmbient = glm::vec4(0.1, 0.1, 0.1, 0.1);
 
@@ -155,8 +154,9 @@ void CityTile::buildPrimitives(){
     for (Building b : buildings) {
         CS123ScenePrimitive primitive;
         primitive.type = PrimitiveType::PRIMITIVE_CUBE;
-        primitive.material.cDiffuse = glm::vec4(1, 1, 1, 1);
-        primitive.material.cAmbient = glm::vec4(1, 1, 1, 1);
+        glm::vec4 buildingColor = chooseBuildingColor(b.height);
+        primitive.material.cDiffuse = buildingColor;
+        primitive.material.cAmbient = buildingColor;
 
         glm::mat4 scale = glm::scale(glm::vec3(b.size.y, b.height, b.size.x));
         glm::mat4 rotate = glm::rotate(-b.angle, glm::vec3(0, 1, 0));

@@ -207,7 +207,7 @@ glm::vec4 CityManager::nextCameraPosition() {
 }
 
 glm::vec4 CityManager::getLookVector() {
-    float verticalComponent = -0.02;
+    float verticalComponent = -0.1;
     glm::vec2 planarLook = m_cameraTrajectory.getDerivative(m_curvePosition);
     glm::vec4 look = glm::vec4(glm::normalize(glm::vec3(planarLook[0], verticalComponent, planarLook[1])), 0.f);
     return look;
